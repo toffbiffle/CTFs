@@ -1,0 +1,25 @@
+Description:
+I wonder what this really is... enc ''.join([chr((ord(flag[i]) << 8) + ord(flag[i + 1])) for i in range(0, len(flag), 2)])
+
+HowTO solve it:
+Downloading and executing the enc gives:
+灩捯䍔䙻ㄶ形楴獟楮獴㌴摟潦弸弰㑣〷㘰摽
+
+a bunch of characters...
+
+
+trying to decrypt and understand the line:
+''.join([chr((ord(flag[i]) << 8) + ord(flag[i + 1])) for i in range(0, len(flag), 2)])
+
+<< is a bitwise shifting operation. 
+
+So by guessing that shifting flag[i] by 8(bits) and then adding the flag[i+1] to it we get a 2-byte(16bits) character,
+(1 character is 1 byte ( or 8 bits ) in UTF-8 ) we can assume that the output is 16-bit encoded.
+
+If we then encode the string we got by utf-16-be we can get the original flag.
+Using python:
+decode_string="灩捯䍔䙻ㄶ形楴獟楮獴㌴摟潦弸弰㑣〷㘰摽"
+print( decode_string.encode( "utf-16-be" ) )
+
+running this will result in the output
+b'picoCTF{16_bits_inst34d_of_8_04c0760d}'
